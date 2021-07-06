@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--这样的东西网上一搜一大把，随便选一个就行了-->
+<configuration>
+    <!--定义一个变量，用来保存日志的路径目录，保存在本地-->
+    <property name="LOG_HOME" value="/opt/module/realtime_20210703/logs"/>
+
+    <!--一、定义日志记录方式-->
+    <!--记录日志的方式1，直接打印到控制台，或者标准输出-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--记录日志的方式2，直接以滚动的方式输出到文件-->
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--记录日志的文件名称-->
+        <file>${LOG_HOME}/shufang.log</file>
+        <!--记录日志的文件的滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/shufang.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 二、为某个类指定日志记录的方式，可以选择多个,为不同级别的日志选择对应的日志记录方式 -->
+    <logger name="com.shufang.loggermock.controller.LoggerController"
+            level="INFO"
+            additivity="false">
+        <appender-ref ref="rollingFile"/>
+        <appender-ref ref="console"/>
+    </logger>
+    <root level="error" additivity="false">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

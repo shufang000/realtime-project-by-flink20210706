@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/flink-process-rt/flink-process-rt.iml" filepath="$PROJECT_DIR$/flink-process-rt/flink-process-rt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logger-mock/logger-mock.iml" filepath="$PROJECT_DIR$/logger-mock/logger-mock.iml" />
+    </modules>
+  </component>
+</project>
