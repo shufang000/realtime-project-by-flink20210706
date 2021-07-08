@@ -22,6 +22,7 @@
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.62" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-client:2.7.7" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-common:2.7.7" level="project" />
     <orderEntry type="library" name="Maven: xmlenc:xmlenc:0.52" level="project" />
