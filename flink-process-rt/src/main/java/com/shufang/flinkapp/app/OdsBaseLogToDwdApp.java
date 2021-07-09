@@ -56,7 +56,7 @@ public class OdsBaseLogToDwdApp {
 
         // TODO 2、从kafka拉取数据获取数据流
         String topic = "ods_base_log";
-        String groupId = "sfGroup";
+        String groupId = "baseLogGroup";
         FlinkKafkaConsumer<String> flinkKafkaConsumer = KafkaUtil.getConsumer(topic, groupId);
         flinkKafkaConsumer.setStartFromEarliest();
         flinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true); //相当于set enable.auto.commit = false;
