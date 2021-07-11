@@ -3,6 +3,7 @@ package com.shufang.flinkapp.util;
 import com.google.common.base.CaseFormat;
 import com.mysql.jdbc.Driver;
 import com.shufang.flinkapp.bean.TableProcess;
+import com.shufang.flinkapp.common.CommonConfig;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.sql.*;
@@ -39,7 +40,7 @@ public class MySQLUtil {
 
             // 2 创建连接
             conn = DriverManager.getConnection(
-                    "jdbc:mysql://shufang101:3306/realtime_config?characterEncoding=utf-8&useSSL=false",
+                    CommonConfig.MYSQL_URL,
                     "root",
                     "888888"
             );

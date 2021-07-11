@@ -2,14 +2,18 @@ package com.shufang.flinkapp.app;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.shufang.flinkapp.app.udf.BaseDBSplitProcessFunction;
+import com.shufang.flinkapp.bean.TableProcess;
 import com.shufang.flinkapp.util.KafkaUtil;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.runtime.state.filesystem.FsStateBackend;
 import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.util.OutputTag;
 
 /**
  * 本类主要将ods中从Mysql业务库同步过来的CDC的数据动态分流到不同的dwd介质中
@@ -38,7 +42,8 @@ public class OdsBaseDBToDwdApp {
         String topic = "ods_base_db";
         String groupId = "baseDBGroup";
         FlinkKafkaConsumer<String> flinkKafkaConsumer = KafkaUtil.getConsumer(topic, groupId);
-        flinkKafkaConsumer.setStartFromLatest();
+        flinkKafkaConsumer.setStartFromEarliest();
+        //flinkKafkaConsumer.setStartFromLatest();
         flinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true); //相当于set enable.auto.commit = false;
         //2.1 获取到数据流
         DataStreamSource<String> jsonStrDs = streamEnv.addSource(flinkKafkaConsumer, "db_source");
@@ -52,10 +57,19 @@ public class OdsBaseDBToDwdApp {
                 return isPushDown;
             }
         });
-        cleanJsonDS.print();
+        //cleanJsonDS.print();
 
 
         // TODO 4 将获取到的数据进行动态的分流，需要读取Mysql中的配置数据，我们选择processFunction
+        //  Note:事实数据输出到主流，维度数据写入到Hbase
+        OutputTag<JSONObject> dim_hbase_sink = new OutputTag<JSONObject>(TableProcess.SINK_TYPE_HBASE){};
+        SingleOutputStreamOperator<JSONObject> factKafkaDS = cleanJsonDS.process(new BaseDBSplitProcessFunction(dim_hbase_sink));
+        DataStream<JSONObject> dimHbaseDS = factKafkaDS.getSideOutput(dim_hbase_sink);
+
+        factKafkaDS.print("kafka = ");
+        dimHbaseDS.print("hbase = ");
+
+
 
         // TODO
         streamEnv.execute("db_source_split");
