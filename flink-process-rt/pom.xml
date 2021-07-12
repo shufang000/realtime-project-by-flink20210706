@@ -21,17 +21,15 @@
 
         <!--如果需要连接Phoenix，我们需要引入以下依赖-->
         <!--TODO 除了需要在客户端添加依赖，还需要在服务端的hbase-site.xml中添加相关的phoenix配置，同时需要将hbase-site.xml文件拷贝到当前的idea本地环境的类路径下-->
+
+        <!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core -->
         <dependency>
             <groupId>org.apache.phoenix</groupId>
-            <artifactId>phoenix-spark</artifactId>
-            <version>5.0.0-HBase-2.0</version>
-            <exclusions>
-            <exclusion>
-                <groupId>org.glassfish</groupId>
-                <artifactId>javax.el</artifactId>
-            </exclusion>
-            </exclusions>
+            <artifactId>phoenix-core</artifactId>
+            <version>4.14.3-HBase-1.4</version>
         </dependency>
+
+
         <!-- *****************************以下是辅助工具************************************ -->
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
@@ -140,6 +138,13 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-jdbc_2.12</artifactId>
             <version>1.12.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-shaded-hadoop-2 -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-shaded-hadoop-2</artifactId>
+            <version>2.8.3-9.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>

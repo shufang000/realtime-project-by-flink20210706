@@ -1,7 +1,12 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.shufang.flinkapp.common.CommonConfig;
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 public class TestTimer {
@@ -86,4 +91,14 @@ public class TestTimer {
 
     }
 
+
+    @Test
+    public void testPhoenixConn() throws ClassNotFoundException, SQLException {
+        Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
+        Connection conn = DriverManager.getConnection(CommonConfig.PHOENIX_URL);
+        System.out.println(conn);
+
+
+
+    }
 }
