@@ -46,7 +46,7 @@ public class OdsBaseDBToDwdApp {
         FlinkKafkaConsumer<String> flinkKafkaConsumer = KafkaUtil.getConsumer(topic, groupId);
         flinkKafkaConsumer.setStartFromEarliest();
         //flinkKafkaConsumer.setStartFromLatest();
-        flinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true); //相当于set enable.auto.commit = false;
+        //flinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true); //相当于set enable.auto.commit = false;
         //2.1 获取到数据流
         DataStreamSource<String> jsonStrDs = streamEnv.addSource(flinkKafkaConsumer, "db_source");
 
@@ -68,7 +68,7 @@ public class OdsBaseDBToDwdApp {
         SingleOutputStreamOperator<JSONObject> factKafkaDS = cleanJsonDS.process(new BaseDBSplitProcessFunction(dim_hbase_sink));
         DataStream<JSONObject> dimHbaseDS = factKafkaDS.getSideOutput(dim_hbase_sink);
 
-        factKafkaDS.print("kafka = ");
+//        factKafkaDS.print("kafka = ");
         dimHbaseDS.print("hbase = ");
 
 

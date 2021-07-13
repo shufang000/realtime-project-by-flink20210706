@@ -21,12 +21,27 @@
 
         <!--如果需要连接Phoenix，我们需要引入以下依赖-->
         <!--TODO 除了需要在客户端添加依赖，还需要在服务端的hbase-site.xml中添加相关的phoenix配置，同时需要将hbase-site.xml文件拷贝到当前的idea本地环境的类路径下-->
-
-        <!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core -->
         <dependency>
-            <groupId>org.apache.phoenix</groupId>
-            <artifactId>phoenix-core</artifactId>
-            <version>4.14.3-HBase-1.4</version>
+            <!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core -->
+                <groupId>org.apache.phoenix</groupId>
+                <artifactId>phoenix-core</artifactId>
+                <version>5.0.0-HBase-2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish</groupId>
+                    <artifactId>javax.el</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-common</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-auth -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.7.7</version>
         </dependency>
 
 

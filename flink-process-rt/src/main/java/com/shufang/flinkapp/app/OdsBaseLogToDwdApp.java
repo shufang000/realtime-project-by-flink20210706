@@ -50,16 +50,16 @@ public class OdsBaseLogToDwdApp {
         streamEnv.getCheckpointConfig().setCheckpointTimeout(60000); //设置checkpoint超时时长为1分钟
         streamEnv.getCheckpointConfig().setTolerableCheckpointFailureNumber(10);
 
-        streamEnv.setStateBackend(
+        /*streamEnv.setStateBackend(
                 //状态后端存储在HDFS的指定路径："hdfs://shufang101:9000/flink20210704/checkpoint/odsBaseLogToDwdApp"
-                new FsStateBackend("hdfs://shufang101:9000/flink20210704/checkpoint/odsBaseLogToDwdApp"));
+                new FsStateBackend("hdfs://shufang101:9000/flink20210704/checkpoint/odsBaseLogToDwdApp"));*/
 
         // TODO 2、从kafka拉取数据获取数据流
         String topic = "ods_base_log";
         String groupId = "baseLogGroup";
         FlinkKafkaConsumer<String> flinkKafkaConsumer = KafkaUtil.getConsumer(topic, groupId);
-        flinkKafkaConsumer.setStartFromEarliest();
-        flinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true); //相当于set enable.auto.commit = false;
+        flinkKafkaConsumer.setStartFromLatest();
+        //flinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true); //相当于set enable.auto.commit = false;
         DataStreamSource<String> baseLogDS = streamEnv.addSource(flinkKafkaConsumer);
 
         // TODO 3、类型转换 String -> JSONObject

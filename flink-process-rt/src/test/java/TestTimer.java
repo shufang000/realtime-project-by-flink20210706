@@ -94,10 +94,10 @@ public class TestTimer {
 
     @Test
     public void testPhoenixConn() throws ClassNotFoundException, SQLException {
+        System.setProperty("HADOOP_USER_NAME", "shufang");
         Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
         Connection conn = DriverManager.getConnection(CommonConfig.PHOENIX_URL);
         System.out.println(conn);
-
 
 
     }

@@ -38,9 +38,11 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
      */
     @Override
     public void open(Configuration parameters) throws Exception {
+
+
         // TODO 1 获取到Phoenix的连接
         Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
-        Connection conn = DriverManager.getConnection(CommonConfig.PHOENIX_URL);
+        conn = DriverManager.getConnection(CommonConfig.PHOENIX_URL);
 
 
         // TODO 2 初始化配置信息
@@ -56,6 +58,7 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
             }
         }, 5000, 5000);
     }
+
 
     // TODO 开始处理数据，在读取完配置表之后，对数据进行分流处理
     @Override
@@ -101,7 +104,7 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
                 }
 
             } else {
-                System.out.println("从Mysql中没有获取到该key" + key + "的配置信息");
+                //System.out.println("该Map中没有获取到该key" + key + "的配置信息，请检查应用是否重启");
 
             }
         }
@@ -140,7 +143,7 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
      */
     private void refreshMetaFromMysql() {
         //================1、读取我们的配置表======================================================
-        System.out.println("查询分流配置表信息，并使用MySQLUtil工具类进行ORM映射，并且缓存在一个内存中的Map中");
+        System.out.println("查询分流配置表信息，并使用MySQLUtil工具类进行ORM映射，并且缓存在一个内存中的Map中" + System.currentTimeMillis());
         String sql = "select * from table_process";
         List<TableProcess> tableProcesses = MySQLUtil.queryList(sql, TableProcess.class, true);
 
@@ -221,11 +224,13 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
         ddl.append(") ");
         ddl.append(sinkExtend);
 
+
         //TODO 在拼接好建表语句之后，需要获取一个Phoenix连接，来执行建表语句，为了减少创建的次数，我们在Open方法中创建连接
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement(ddl.toString());
             ps.execute();
+            System.out.println("执行SQL ：【" + ddl + "】建表语句成功");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
