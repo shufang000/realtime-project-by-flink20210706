@@ -36,7 +36,7 @@ public class MySQLUtil {
         ArrayList<T> resultList = new ArrayList<>();
         try {
             // 1 注册驱动
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             // 2 创建连接
             conn = DriverManager.getConnection(
