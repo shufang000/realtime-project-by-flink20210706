@@ -163,7 +163,9 @@ public class OdsBaseLogToDwdApp {
                 // 如果当前jsonObj中包含“start“的属性，那么就输出到测输出流"startTag"
                 if (start != null && start.size() > 0) {
                     ctx.output(startTag, jsonString);
-                } else { // 不是启动日志的话，进else
+                } else {
+                    //不是启动日志的话，进else,那么就是页面日志，其实曝光日志也是页面日志的一种
+                    out.collect(jsonString);
 
                     JSONArray display = value.getJSONArray("displays");
                     String pageId = value.getJSONObject("page").getString("page_id");
@@ -176,8 +178,8 @@ public class OdsBaseLogToDwdApp {
                             ctx.output(displayTag,disObj.toString());
                         }
                         /**************************************************/
-                    } else
-                        out.collect(jsonString);
+                    }
+
 
                 }
 
