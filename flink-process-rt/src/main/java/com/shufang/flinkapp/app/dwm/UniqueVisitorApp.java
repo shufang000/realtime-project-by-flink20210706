@@ -1,4 +1,4 @@
-package com.shufang.flinkapp.app;
+package com.shufang.flinkapp.app.dwm;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
