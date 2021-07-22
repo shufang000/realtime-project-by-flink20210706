@@ -19,9 +19,9 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
 
     private OutputTag<JSONObject> outputTag;
     // TODO 0 KV的类型为 =>> <表明:操作 -> TableProcess>,用于存储配置信息的缓存
-    private Map<String, TableProcess> configMap = new HashMap<String, TableProcess>(32);
+    private Map<String, TableProcess> configMap = null;
     // 用于存放第一次初始化已经创建了的表，下一次定时读取更新后，只需要创建没有处理过的表了，这里使用一个Set集合进行存储
-    private Set<String> finishedTables = new HashSet<String>();
+    private Set<String> finishedTables = null;
 
     public BaseDBSplitProcessFunction(OutputTag<JSONObject> outputTag) {
         this.outputTag = outputTag;
@@ -43,7 +43,8 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
         // TODO 1 获取到Phoenix的连接
         Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
         conn = DriverManager.getConnection(CommonConfig.PHOENIX_URL);
-
+        configMap = new HashMap<String, TableProcess>(32);
+        finishedTables = new HashSet<String>();
 
         // TODO 2 初始化配置信息
         refreshMetaFromMysql();

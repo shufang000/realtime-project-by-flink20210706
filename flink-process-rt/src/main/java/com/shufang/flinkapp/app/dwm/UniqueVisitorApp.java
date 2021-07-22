@@ -1,6 +1,5 @@
 package com.shufang.flinkapp.app.dwm;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.shufang.flinkapp.util.KafkaUtil;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -15,6 +14,7 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import org.mortbay.util.ajax.JSON;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +34,8 @@ public class UniqueVisitorApp {
         // 2 定义需要消费的主题
         String topic = "dwd_page_log";
         String groupId = "unique_visitor_group";
+        // 定义输出的DWM的主题：dwm_unique_visit
+        String sinkTopic = "dwm_unique_visit";
 
         // 3 将String类型的数据转换成JSONObject对象
         FlinkKafkaConsumer<String> consumer = KafkaUtil.getConsumer(topic, groupId);
@@ -44,7 +46,7 @@ public class UniqueVisitorApp {
             }
         });
 
-        jsonObjDS.print();
+        //jsonObjDS.print();
         // 4 为了定义KeyedState，我们先对数据进行keyBy操作
         KeyedStream<JSONObject, String> keyedDS = jsonObjDS.keyBy(jsonObj -> jsonObj.getJSONObject("common").getString("mid"));
         SingleOutputStreamOperator<JSONObject> uvDS = keyedDS.filter(
@@ -96,10 +98,9 @@ public class UniqueVisitorApp {
                 }
         ).uid("UVFilter");
 
-        // 定义输出的DWM的主题：dwm_unique_visit
-        String sinkTopic = "dwm_unique_visit";
         FlinkKafkaProducer<String> producer = KafkaUtil.getProducer(sinkTopic);
-        uvDS.map(JSON::toString).addSink(producer);
+        SingleOutputStreamOperator<String> jsonStrDS = uvDS.map(jsonObj -> jsonObj.toJSONString());
+        jsonStrDS.addSink(producer);
 
         streamEnv.execute();
 
