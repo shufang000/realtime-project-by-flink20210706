@@ -1,0 +1,8 @@
+#!/bin/bash
+#查看所有的JVM进程
+for i in shufang@shufang101 shufang@shufang102 shufang@shufang103
+do
+	echo "================           $i             ================"
+	ssh $i "'$JAVA_HOME/bin/jps'"
+done
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in shufang@shufang101 shufang@shufang102 shufang@shufang103
+do 
+        echo "---------------------- $i-------------------------";
+
+        ssh $i /opt/module/zookeeper-3.7.0/bin/zkServer.sh stop
+done
+

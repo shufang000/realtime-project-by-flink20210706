@@ -1,0 +1,7 @@
+#!/bin/bash
+for i in shufang@shufang101 shufang@shufang102 shufang@shufang103
+do 
+        echo "---------------------- $i正在关闭kafka-------------------------";
+
+        ssh $i /opt/module/kafka_2.12-1.1.0/bin/kafka-server-stop.sh
+done

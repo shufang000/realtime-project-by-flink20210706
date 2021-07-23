@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in shufang@shufang103 shufang@shufang102 shufang@shufang101
+do 
+        echo "---------------------- $i-------------------------";
+
+        ssh $i /opt/module/presto/presto-server-0.252/bin/launcher stop
+done
+

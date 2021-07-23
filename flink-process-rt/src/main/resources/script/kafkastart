@@ -1,0 +1,5 @@
+for host in shufang101 shufang102 shufang103
+do
+ echo "$host 正在启动kafka......"
+ ssh $host "source /etc/profile;/opt/module/kafka_2.12-1.1.0/bin/kafka-server-start.sh -daemon /opt/module/kafka_2.12-1.1.0/config/server.properties"
+done

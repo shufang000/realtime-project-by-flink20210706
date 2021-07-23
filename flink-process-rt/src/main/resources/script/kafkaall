@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in shufang@shufang101 shufang@shufang102 shufang@shufang103
+do 
+        echo "---------------------- $i正在启动kafka-------------------------";
+
+        nohup ssh $i /opt/module/kafka_2.12-1.1.0/bin/kafka-server-start.sh /opt/module/kafka_2.12-1.1.0/config/server.properties 1>/dev/null 2>&1 &
+done
+

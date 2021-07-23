@@ -1,0 +1,1 @@
+jps | grep Maxwell | awk '{print $1}'|xargs kill
