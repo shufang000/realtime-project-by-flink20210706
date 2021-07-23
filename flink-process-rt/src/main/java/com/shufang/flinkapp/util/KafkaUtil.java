@@ -18,7 +18,7 @@ import java.util.Properties;
 public class KafkaUtil {
 
     // 定义消费的kafka的集群的ip及端口
-    private static final String BOOTSTRAP_SERVER = "shufang101:9092,shfuang102:9092,shufang103:9092";
+    private static final String BOOTSTRAP_SERVER = "shufang101:9092,shufang102:9092,shufang103:9092";
 
     /**
      * 获取到FlinkKafkaConsumer
