@@ -1,5 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.shufang.flinkapp.bean.OrderDetail;
+import com.shufang.flinkapp.bean.OrderInfo;
 import com.shufang.flinkapp.common.CommonConfig;
 import org.junit.Test;
 
@@ -7,6 +9,8 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class TestTimer {
@@ -100,5 +104,37 @@ public class TestTimer {
         System.out.println(conn);
 
 
+    }
+
+
+    @Test
+    public void testJSONMap(){
+        String json = "{\n" +
+                "\t\"sku_num\": \"2\",\n" +
+                "\t\"create_time\": \"2021-07-23 22:31:20\",\n" +
+                "\t\"sku_id\": 5,\n" +
+                "\t\"order_price\": 999.00,\n" +
+                "\t\"source_type\": \"2402\",\n" +
+                "\t\"sku_name\": \"Redmi 10X 4G Helio G85游戏芯 4800万超清四摄 5020mAh大电量 小孔全面屏 128GB大存储 4GB+128GB 明月灰 游戏智能手机 小米 红米\",\n" +
+                "\t\"id\": 212967,\n" +
+                "\t\"source_id\": 22,\n" +
+                "\t\"order_id\": 69118,\n" +
+                "\t\"split_total_amount\": 1998.00\n" +
+                "}";
+
+
+        System.out.println(JSON.parseObject(json, OrderDetail.class));
+
+
+    }
+
+    @Test
+    public void test11() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        System.out.println(sdf.parse("2021-07-23 22:31:20").getTime());
+
+
+        System.out.println(sdf.format(new Date(1627050680000L)));
     }
 }

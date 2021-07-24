@@ -30,6 +30,7 @@ public class UniqueVisitorApp {
         // 1 获取执行环境
         StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
         streamEnv.setParallelism(3);
+        //TODO 生产需要设置checkpoint
 
         // 2 定义需要消费的主题
         String topic = "dwd_page_log";

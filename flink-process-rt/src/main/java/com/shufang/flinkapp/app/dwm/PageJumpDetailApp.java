@@ -38,6 +38,8 @@ public class PageJumpDetailApp {
         StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
         streamEnv.setParallelism(3);
 
+        //TODO 生产需要设置checkpoint
+
         // 2 定义需要消费的主题
         String topic = "dwd_page_log";
         String groupId = "page_jump_group";

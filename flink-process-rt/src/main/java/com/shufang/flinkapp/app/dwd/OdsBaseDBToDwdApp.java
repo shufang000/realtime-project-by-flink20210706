@@ -85,6 +85,7 @@ public class OdsBaseDBToDwdApp {
         //维度输出到Hbase
         dimHbaseDS.addSink(new DimHbaseSink());
         //事实输出到Kafka
+        factKafkaDS.print("===========");
         factKafkaDS.addSink(KafkaUtil.getProducer(DEFAULT_TOPIC, new MyKafkaSerializerSchema()));
 
         streamEnv.execute("db_source_split");
