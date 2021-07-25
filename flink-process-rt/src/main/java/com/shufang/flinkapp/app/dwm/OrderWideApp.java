@@ -105,7 +105,7 @@ public class OrderWideApp {
                 )
         );
 
-        //6 TODO 使用interval join进行双流的join，其实还有窗口join，在flink sql中还有 regular join 以及 temporary join(dim关联)
+        //6 TODO 使用interval join进行双流的join，其实还有窗口join，在flink sql中还有 regular join 以及 temporal join(dim关联)
         KeyedStream<OrderInfo, Long> orderInfoKeyedStream = orderInfoWithTsDS.keyBy(OrderInfo::getId);
         KeyedStream<OrderDetail, Long> orderDetailKeyedStream = orderDetailWithTsDS.keyBy(OrderDetail::getOrder_id);
 
