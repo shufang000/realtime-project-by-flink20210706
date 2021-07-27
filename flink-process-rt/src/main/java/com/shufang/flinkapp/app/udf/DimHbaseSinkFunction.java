@@ -2,6 +2,7 @@ package com.shufang.flinkapp.app.udf;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shufang.flinkapp.common.CommonConfig;
+import com.shufang.flinkapp.util.DimQueryUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Set;
 
-public class DimHbaseSink extends RichSinkFunction<JSONObject> {
+public class DimHbaseSinkFunction extends RichSinkFunction<JSONObject> {
 
     Connection conn = null;
 
@@ -31,8 +32,8 @@ public class DimHbaseSink extends RichSinkFunction<JSONObject> {
 
         // 1 获取到SinkObject的sinkTable
         String sinkTable = jsonObject.getString("sink_table");
-
         JSONObject dataJsonObj = jsonObject.getJSONObject("data");
+
         // 2 然后拼接upsertSQL
         Set<String> columns = dataJsonObj.keySet();
         Collection<Object> values = dataJsonObj.values();
@@ -50,7 +51,7 @@ public class DimHbaseSink extends RichSinkFunction<JSONObject> {
             System.out.println("upsertSQL ====" +upsertSQL);
             ps = conn.prepareStatement(upsertSQL);
             ps.execute();
-            conn.commit(); //Phoenix 的JDBC默认不会自动提交事务，需要手动提交，这里与MySQL的不一样
+            conn.commit(); //Phoenix的JDBC默认不会自动提交事务，需要手动提交，这里与MySQL的不一样
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
@@ -59,7 +60,10 @@ public class DimHbaseSink extends RichSinkFunction<JSONObject> {
                 ps.close();
             }
         }
-
+        // TODO 如果为update操作，那么就删除Redis中失效的缓存，否则数据会不一致
+        if (jsonObject.getString("type").equals("update")){
+            DimQueryUtil.deleteCache(sinkTable,dataJsonObj.getString("id"));
+        }
 
     }
 }

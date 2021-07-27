@@ -117,7 +117,9 @@ public class OrderWideApp {
                         out.collect(new OrderWide(orderInfo, orderDetail));
                     }
                 });
-        orderWideDS.print();
+        //orderWideDS.print();
+
+        // 7 关联维度数据，维度数据存在Hbase中，引入旁路缓存Redis而不是堆缓存，增强稳定性
 
 
         streamEnv.execute();

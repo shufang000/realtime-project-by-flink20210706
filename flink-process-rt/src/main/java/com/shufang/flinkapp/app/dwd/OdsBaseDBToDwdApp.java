@@ -3,20 +3,18 @@ package com.shufang.flinkapp.app.dwd;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.shufang.flinkapp.app.udf.BaseDBSplitProcessFunction;
-import com.shufang.flinkapp.app.udf.DimHbaseSink;
+import com.shufang.flinkapp.app.udf.DimHbaseSinkFunction;
 import com.shufang.flinkapp.bean.TableProcess;
 import com.shufang.flinkapp.util.KafkaUtil;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.serialization.SerializationSchema;
-import org.apache.flink.runtime.state.filesystem.FsStateBackend;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import org.apache.flink.util.OutputTag;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -83,7 +81,7 @@ public class OdsBaseDBToDwdApp {
         //dimHbaseDS.print("hbase = ");
 
         //维度输出到Hbase
-        dimHbaseDS.addSink(new DimHbaseSink());
+        dimHbaseDS.addSink(new DimHbaseSinkFunction());
         //事实输出到Kafka
         factKafkaDS.print("===========");
         factKafkaDS.addSink(KafkaUtil.getProducer(DEFAULT_TOPIC, new MyKafkaSerializerSchema()));

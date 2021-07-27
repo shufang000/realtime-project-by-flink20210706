@@ -24,12 +24,25 @@ public class RedisUtil {
             jedisPoolConfig.setTestOnCreate(false);
 
             jedisPool = new JedisPool(jedisPoolConfig, "shufang102", 6379, 1000);
+
             System.out.println("开辟连接池");
-            return jedisPool.getResource();
+            Jedis jedis = jedisPool.getResource();
+            jedis.auth("888888");//redis在远程连接的时候需要认证
+            return jedis;
         } else {
             System.out.println(" 连接池:" + jedisPool.getNumActive());
-            return jedisPool.getResource();
+            Jedis jedis = jedisPool.getResource();
+            jedis.auth("888888"); //redis在远程连接的时候需要认证
+            return jedis;
         }
+    }
+
+    public static void main(String[] args) {
+        Jedis jedis = getJedis();
+        System.out.println(jedis);
+
+        System.out.println(jedis.get("1001"));
+
     }
 
 }
