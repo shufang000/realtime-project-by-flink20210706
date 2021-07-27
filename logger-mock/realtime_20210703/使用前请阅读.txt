@@ -1,0 +1,13 @@
+该目录下的内容包含：
+	DB数据的模拟数据生成jar包
+	埋点Log数据的模拟数据jar包
+	以及处理日志数据到kafka-ods层的springboot服务，使用KafkaTemplate.send()发送到 ods_base_log主题（）
+NOTE：
+如果时模拟日志数据，
+1、先启动处理日志数据到kafka-ods层的springboot服务,可以配合Nginx实现反向代理，将数据请求处理均衡到不同节点
+
+2、修改logger_mock/app.pro配置文件,java -jar xxxx.jar
+
+如果时模拟业务数据，
+1、先启动maxwell.sh
+2、然后修改db_mock/app.pro配置文件，java -jar xxxx.jar
