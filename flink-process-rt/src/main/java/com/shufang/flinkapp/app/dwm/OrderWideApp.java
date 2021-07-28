@@ -1,6 +1,8 @@
 package com.shufang.flinkapp.app.dwm;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.shufang.flinkapp.app.udf.DimAsyncFunction;
 import com.shufang.flinkapp.bean.OrderDetail;
 import com.shufang.flinkapp.bean.OrderInfo;
 import com.shufang.flinkapp.bean.OrderWide;
@@ -9,6 +11,7 @@ import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.datastream.AsyncDataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -20,6 +23,7 @@ import org.apache.flink.util.Collector;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class OrderWideApp {
     public static void main(String[] args) throws Exception {
@@ -119,7 +123,19 @@ public class OrderWideApp {
                 });
         //orderWideDS.print();
 
-        // 7 关联维度数据，维度数据存在Hbase中，引入旁路缓存Redis而不是堆缓存，增强稳定性
+        // TODO 7 关联维度数据，维度数据存在Hbase中，引入旁路缓存Redis而不是堆缓存，增强稳定性，这里采用异步IO的方式，提升对外部系统请求的效率
+        AsyncDataStream.unorderedWait(
+                orderWideDS, new DimAsyncFunction<OrderWide>("") {
+                    @Override
+                    public String getKey(OrderWide orderWide) {
+                        return String.valueOf(orderWide.getOrder_id()); //确定查询维度的key
+                    }
+
+                    @Override
+                    public void join(OrderWide orderWide, JSONObject jsonObject) {
+                        //TODO 需要实现
+                    }
+                },1000, TimeUnit.MILLISECONDS,300);
 
 
         streamEnv.execute();
