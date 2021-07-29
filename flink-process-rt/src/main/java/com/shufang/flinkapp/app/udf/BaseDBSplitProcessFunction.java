@@ -96,10 +96,10 @@ public class BaseDBSplitProcessFunction extends ProcessFunction<JSONObject, JSON
                 }
 
                 //TODO 将json数据进行处理之后，我们需要通过sinkType将数据进行分流处理
-                if (tableProcess != null && tableProcess.getSinkType().equals(TableProcess.SINK_TYPE_HBASE)) {
+                if (tableProcess.getSinkType().equals(TableProcess.SINK_TYPE_HBASE)) {
                     // 如果sinkType = hbase，也就是维度数据，就往hbase的流中发送
                     ctx.output(outputTag, jsonObj);
-                } else if (tableProcess != null && tableProcess.getSinkType().equals(TableProcess.SINK_TYPE_KAFKA)) {
+                } else if (tableProcess.getSinkType().equals(TableProcess.SINK_TYPE_KAFKA)) {
                     // 如果sinkType = kafka，也就是事实数据，就往kafka的的主流中发送
                     out.collect(jsonObj);
                 }

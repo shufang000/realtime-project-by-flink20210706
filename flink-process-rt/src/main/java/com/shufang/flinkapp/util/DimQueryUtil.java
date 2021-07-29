@@ -147,10 +147,14 @@ public class DimQueryUtil {
 
 
     public static void main(String[] args) throws Exception {
-        JSONObject dim_user_info = queryDimWithCache(
+        /*JSONObject dim_user_info = queryDimWithCache(
                 "DIM_USER_INFO", Tuple2.of("id", "10001"), Tuple2.of("login_name", "4bwf7meg1u2"));
         System.out.println(dim_user_info);
         JSONObject dim_user_info1 = queryDimWithCache("DIM_USER_INFO", Tuple2.of("id", "10001"));
-        System.out.println(dim_user_info1);
+        System.out.println(dim_user_info1);*/
+
+
+
+        deleteCache("sdewr","sdas");
     }
 }

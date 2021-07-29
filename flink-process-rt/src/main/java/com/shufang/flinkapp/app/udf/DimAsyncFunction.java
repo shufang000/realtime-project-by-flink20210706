@@ -54,7 +54,7 @@ public abstract class DimAsyncFunction<T> extends RichAsyncFunction<T, T> implem
                     //1 首先获取维度数据
                     JSONObject jsonObject = DimQueryUtil.queryDimWithCache(tableName, getKey(input));
                     System.out.println("维度数据为：" + jsonObject);
-                    //2 关联维度
+                    //2 关联维度,只有在查询出来结果的情况下才进行关联
                     if (!Objects.isNull(jsonObject)) {
                         join(input,jsonObject);
                     }
