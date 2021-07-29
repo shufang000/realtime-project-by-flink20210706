@@ -35,6 +35,10 @@ public abstract class DimAsyncFunction<T> extends RichAsyncFunction<T, T> implem
         pool = ThreadPoolUtil.getInstance();
     }
 
+/*    @Override
+    public void timeout(T input, ResultFuture<T> resultFuture) throws Exception {
+        resultFuture.complete(Collections.singletonList(null));
+    }*/
 
     /**
      * 发送异步请求的方法
