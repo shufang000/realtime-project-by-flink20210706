@@ -227,8 +227,8 @@ public class OrderWideApp {
 
 
         SingleOutputStreamOperator<String> orderWideFinalDS = orderWideJoinedDS6.map(JSON::toJSONString);
-        orderWideFinalDS.print();
-        //orderWideFinalDS.addSink(KafkaUtil.getProducer(sinkTopic));
+        orderWideFinalDS.print("order wide string == ");
+        orderWideFinalDS.addSink(KafkaUtil.getProducer(sinkTopic));
 
         streamEnv.execute();
     }
