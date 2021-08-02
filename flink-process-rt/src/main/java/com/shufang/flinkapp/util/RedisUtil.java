@@ -30,7 +30,7 @@ public class RedisUtil {
             //jedis.auth("888888");//redis在远程连接的时候需要认证
             return jedis;
         } else {
-            System.out.println(" 连接池:" + jedisPool.getNumActive());
+            //System.out.println(" 连接池:" + jedisPool.getNumActive());
             Jedis jedis = jedisPool.getResource();
             //jedis.auth("888888"); //redis在远程连接的时候需要认证
             return jedis;

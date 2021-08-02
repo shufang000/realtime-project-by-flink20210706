@@ -225,10 +225,10 @@ public class OrderWideApp {
                 }, 60, TimeUnit.SECONDS);
 
 
-        //orderWideJoinedDS6.print();
 
-        orderWideJoinedDS6.map(JSON::toJSONString)
-                .addSink(KafkaUtil.getProducer(sinkTopic));
+        SingleOutputStreamOperator<String> orderWideFinalDS = orderWideJoinedDS6.map(JSON::toJSONString);
+        orderWideFinalDS.print();
+        //orderWideFinalDS.addSink(KafkaUtil.getProducer(sinkTopic));
 
         streamEnv.execute();
     }

@@ -57,15 +57,15 @@ public abstract class DimAsyncFunction<T> extends RichAsyncFunction<T, T> implem
                     long start = System.currentTimeMillis();
                     //1 首先获取维度数据
                     JSONObject jsonObject = DimQueryUtil.queryDimWithCache(tableName, getKey(input));
-                    System.out.println("维度数据为：" + jsonObject);
+                    //System.out.println("维度数据为：" + jsonObject);
                     //2 关联维度,只有在查询出来结果的情况下才进行关联
                     if (!Objects.isNull(jsonObject)) {
                         join(input,jsonObject);
                     }
-                    System.out.println("关联维度之后的数据为：" + input);
+                    //System.out.println("关联维度之后的数据为：" + input);
                     long end = System.currentTimeMillis();
 
-                    System.out.println("异步IO关联该数据消耗 " + (end-start) + "ms~");
+                    //System.out.println("异步IO关联该数据消耗 " + (end-start) + "ms~");
                     //3 最终将数据传给下一个环节
                     resultFuture.complete(Collections.singletonList(input));
                 } catch (Exception e) {
