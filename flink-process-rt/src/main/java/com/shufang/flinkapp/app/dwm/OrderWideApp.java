@@ -44,7 +44,7 @@ public class OrderWideApp {
 
         // 3 读取OrderInfo数据
         FlinkKafkaConsumer<String> orderInfoConsumer = KafkaUtil.getConsumer(orderInfoTopic, groupId);
-        orderInfoConsumer.setStartFromEarliest();
+        //orderInfoConsumer.setStartFromEarliest();
         SingleOutputStreamOperator<OrderInfo> orderInfoDS
                 = streamEnv.addSource(orderInfoConsumer)
                 .map(new RichMapFunction<String, OrderInfo>() {
@@ -68,7 +68,7 @@ public class OrderWideApp {
 
         // 4 读取OrderDetail的数据
         FlinkKafkaConsumer<String> orderDtlConsumer = KafkaUtil.getConsumer(orderDtlInfoTopic, groupId);
-        orderDtlConsumer.setStartFromEarliest();
+        //orderDtlConsumer.setStartFromEarliest();
         SingleOutputStreamOperator<OrderDetail> orderDtlDS
                 = streamEnv.addSource(orderDtlConsumer)
                 .map(new RichMapFunction<String, OrderDetail>() {
