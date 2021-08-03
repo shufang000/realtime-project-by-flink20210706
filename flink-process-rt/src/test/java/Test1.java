@@ -40,6 +40,10 @@ public class Test1 {
         "}";
 
         // 这个方法需要调用该Bean的有参构造器，不然属性全部为null
-        System.out.println(JSONObject.parseObject(s, OrderWide.class));
+        OrderWide orderWide = JSONObject.parseObject(s, OrderWide.class);
+        System.out.println(orderWide);
+
+
+        System.out.println(JSONObject.toJSONString(orderWide));
     }
 }
