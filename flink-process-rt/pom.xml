@@ -23,9 +23,9 @@
         <!--TODO 除了需要在客户端添加依赖，还需要在服务端的hbase-site.xml中添加相关的phoenix配置，同时需要将hbase-site.xml文件拷贝到当前的idea本地环境的类路径下-->
         <dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core -->
-                <groupId>org.apache.phoenix</groupId>
-                <artifactId>phoenix-core</artifactId>
-                <version>5.0.0-HBase-2.0</version>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>5.0.0-HBase-2.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish</groupId>
@@ -43,6 +43,7 @@
             <artifactId>hadoop-common</artifactId>
             <version>2.7.7</version>
         </dependency>
+
 
 
         <!-- *****************************以下是辅助工具************************************ -->
@@ -183,6 +184,20 @@
             <version>${flink.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-avro -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-avro</artifactId>
+            <version>1.12.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.avro/avro -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.10.2</version>
+        </dependency>
+
+
 
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -215,6 +230,33 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!--AVRO的插件-->
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>1.10.2</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
