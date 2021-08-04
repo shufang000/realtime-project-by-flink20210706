@@ -8,11 +8,13 @@ import com.shufang.flinkapp.util.DataTimeFormatUtil;
 import com.shufang.flinkapp.util.KafkaUtil;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.ProcessJoinFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
@@ -51,10 +53,10 @@ public class PaymentWideApp {
                                         (paymentInfo, ts) -> DataTimeFormatUtil.getTsFromDateStr(paymentInfo.getCallback_time())
                                 )
                 );
-        paymentInfoDS.print("paymentInfoDS");
+        //paymentInfoDS.print("paymentInfoDS");
 
         SingleOutputStreamOperator<OrderWide> orderWideDS = streamEnv
-                .addSource(KafkaUtil.getConsumer(orderWideSourceTopic, groupId).setStartFromLatest()).map(
+                .addSource(KafkaUtil.getConsumer(orderWideSourceTopic, groupId).setStartFromEarliest()).map(
                         new MapFunction<String, OrderWide>() {
                             @Override
                             public OrderWide map(String jsonStr) throws Exception {
@@ -77,7 +79,7 @@ public class PaymentWideApp {
         KeyedStream<OrderWide, Long> orderWideKeyedDS = orderWideDS.keyBy(OrderWide::getOrder_id);
 
         // 5 进行interval join,假设订单在30分钟之内支付才算有效
-        SingleOutputStreamOperator<PaymentWide> joinedPaymentDS = paymentInfoKeyedDS.intervalJoin(orderWideKeyedDS)
+        DataStream<PaymentWide> joinedPaymentDS = paymentInfoKeyedDS.intervalJoin(orderWideKeyedDS)
                 .inEventTime()
                 .between(Time.seconds(-1800), Time.seconds(0))
                 .process(new ProcessJoinFunction<PaymentInfo, OrderWide, PaymentWide>() {
@@ -87,9 +89,17 @@ public class PaymentWideApp {
                     }
                 });
 
-        //joinedPaymentDS.print();
-        // 6 将关联后的结果以字符串的格式进行输出到kafka-DWM层：dwm_payment_wide
 
+        // 6 将关联后的结果以字符串的格式进行输出到kafka-DWM层：dwm_payment_wide
+        SingleOutputStreamOperator<String> paymentWideFinalDS = joinedPaymentDS.map(new MapFunction<PaymentWide, String>() {
+            @Override
+            public String map(PaymentWide value) throws Exception {
+                return JSONObject.toJSONString(value);
+            }
+        });
+
+        paymentWideFinalDS.print("paymentWideFinalDS= ");
+       // paymentWideFinalDS.addSink(KafkaUtil.getProducer(paymentWideSinkTopic));
 
         streamEnv.execute();
     }

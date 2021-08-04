@@ -3,9 +3,11 @@ package com.shufang.flinkapp.bean;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * 订单宽表实体类
@@ -202,7 +204,11 @@ public class OrderWide {
         this.feight_fee = feight_fee;
     }
 
+    //
     public BigDecimal getSplit_feight_fee() {
+        if(Objects.isNull(split_feight_fee)){
+            split_feight_fee = BigDecimal.valueOf(0);
+        }
         return split_feight_fee;
     }
 
@@ -210,7 +216,11 @@ public class OrderWide {
         this.split_feight_fee = split_feight_fee;
     }
 
+
     public BigDecimal getSplit_activity_amount() {
+        if(Objects.isNull(split_activity_amount)){
+            split_activity_amount = BigDecimal.valueOf(0);
+        }
         return split_activity_amount;
     }
 
@@ -219,6 +229,9 @@ public class OrderWide {
     }
 
     public BigDecimal getSplit_coupon_amount() {
+        if(Objects.isNull(split_coupon_amount)){
+            split_coupon_amount = BigDecimal.valueOf(0);
+        }
         return split_coupon_amount;
     }
 
